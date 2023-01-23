@@ -3,15 +3,39 @@ import * as Chakra from "@chakra-ui/react";
 import { IOption, Select } from "@/src/components/Select";
 
 export const PageEvaluateStartupIdeas = () => {
+  const [state, setState] = React.useState({
+    values: questions.map(() => "0"),
+  });
+
+  const handleChangeQuestion = (qIndex: number, value: string) => {
+    setState((prev) => ({
+      ...prev,
+      values: prev.values.map((val, i) => (i === qIndex ? value : val)),
+    }));
+  };
+
+  const resultOfMultiplication = state.values
+    .map((val) => Number(val))
+    .reduce((total, current) => {
+      return current * total;
+    });
+
+  console.log(resultOfMultiplication);
+
   return (
     <Chakra.VStack bg="gray.50" minH="100vh" py="8">
       <Chakra.VStack w="full" maxW="container.sm" spacing="16">
         {questions.map((question, index) => (
           <Chakra.VStack key={index} w="full" align="flex-start">
             <Chakra.Text>{question.question}</Chakra.Text>
-            <Select options={question.alternatives} />
+            <Select
+              options={question.alternatives}
+              value={state.values[index]}
+              onChange={(e) => handleChangeQuestion(index, e.target.value)}
+            />
           </Chakra.VStack>
         ))}
+        <Chakra.Text>Total: {resultOfMultiplication}</Chakra.Text>
       </Chakra.VStack>
     </Chakra.VStack>
   );
@@ -108,6 +132,11 @@ const options5: IOption[] = [
     value: "3",
   },
 ];
+
+interface IQuestion {
+  question: string;
+  alternatives: IOption[];
+}
 
 const questions = [
   {

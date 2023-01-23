@@ -10,9 +10,9 @@ interface ISelect extends Chakra.SelectProps {
   options: IOption[];
 }
 
-export const Select = ({ options }: ISelect) => {
+export const Select = ({ options, ...props }: ISelect) => {
   return (
-    <Chakra.Select>
+    <Chakra.Select {...props}>
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>
           {opt.label}
